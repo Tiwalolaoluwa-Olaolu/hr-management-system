@@ -1,77 +1,178 @@
-import { Plus } from "lucide-react";
-import Button from "../shared/components/Button";
-import Sidebar from "../shared/components/Sidebar";
-import BalanceCard from "../shared/components/BalanceCard";
-import StatsCard from "../shared/components/StatsCard";
-import { useNavigate } from "react-router";
-import ErrorMessage from "../shared/components/ErrorMessage";
-import TopBar from "../shared/components/TopBar";
+import { ArrowRight, CalendarClock, CheckCircle2, Clock3, UsersRound, WalletCards } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import AppShell from '../shared/components/AppShell';
+import StatusBadge from '../shared/components/StatusBadge';
+import ApiStatus from '../shared/components/ApiStatus';
+import { useAuth } from '../core/services/Context';
+// import { apiGet } from '../services/api';
+import { testDashboardData } from '../shared/components/TestData';
 
 const Dashboard = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const [data, setData] = useState(null);
+  const [error, setError] = useState('');
 
-  const userInfo = {
-    firstName: 'Tiwalola',
-    lastName: 'Olaolu',
-    role: 'Employee',
-    status: 'Active',
-    leaveBalance: 18,
-    completedRequests: 25,
-    pendingRequests: 2
-  };
+  useEffect(() => {
+    if (!user) return;
+    const load = async () => {
+      // const result = await apiGet('/dashboard');
+      // setData(result);
 
-  const {
-    firstName,
-    lastName,
-    role,
-    status,
-    leaveBalance,
-    completedRequests,
-    pendingRequests} = userInfo
-  ;
+      setData(testDashboardData[user.role]);
+    };
 
-  const navigateToRequestLeave = () => {
-    status === 'Active' ? navigate('/request-leave') : <ErrorMessage />;
-  }
+    load();
+    
+    }, [user]
+  );
+
+  if (!user) return null;
+
+  return (
+    <AppShell
+      name={user.name}
+      role={user.role}
+      status={user.status}
+    >
+      <section className='page-heading dashboard-heading'>
+        <div>
+          <span className='eyebrow'>OVERVIEW</span>
+          <h1>Hi, {user.firstName}</h1>
+          <p>Here is your leave management overview.</p>
+        </div>
+        {
+          user.status === 'Active' && (
+          <button type='button' className='primary-action'  
+            onClick={() => navigate('/leave-requests')}>
+            Request leave
+            <ArrowRight size={17} />
+          </button>)
+        }
+      </section>
+      {
+        error ? 
+          <ApiStatus message={error} /> :
+          !data ? 
+            <ApiStatus /> :
+            <DashboardContent
+              data={data}
+              role={user.role}
+              navigate={navigate}
+            />
+      }
+    </AppShell>
+  );
+};
+
+const DashboardContent = ({ data, role, navigate }) => {
+  const requests = data.requests || [];
+  const recent = requests.slice(0, 5);
 
   return (
     <>
-      <main className='dashboard-wrapper'>
-        <Sidebar role={role} />
-        <div className='dashboard-main-view'>
-          <TopBar />
-          <div className='stats-section-wrapper'>
-            <h2>Welcome, {firstName}!</h2>
-            <section className='stats-section'>
-              <BalanceCard balance={leaveBalance} />
-              <StatsCard
-                cardTitle='COMPLETED'
-                number={completedRequests}
-              />
-              <StatsCard
-                cardTitle='PENDING'
-                number={pendingRequests}
-              />
-            </section>
-            <Button
-              btnEvent={navigateToRequestLeave}
-              btnUniqueStyling='request-leave-btn'
-              btnIcon={<Plus />}
-              btnText='Request Leave'
-            />
-          </div>
-          <section className="feed-section">
-            <div className='activity-section'>
-              <h3>Recent Activity</h3>
-            </div>
-            <div className='trend-section'>
+      <section className='metric-grid'>
+        <Metric
+          icon={<WalletCards />}
+          label='Leave balance'
+          value={`${data.leaveBalance ?? 0} days`}
+          accent
+        />
+        <Metric
+          icon={<Clock3 />}
+          label='Pending requests'
+          value={data.pendingRequests ?? 0}
+          note={role === 'Manager' ? 'Awaiting your review' : 'Awaiting approval'}
+        />
+        <Metric
+          icon={
+            role === 'Manager' ? <UsersRound /> : <CheckCircle2 />
+            }
+            label={
+              role === 'Manager' ? 'Team members' : 'Completed requests'
+            }
+            value={
+              data.teamMembers ?? data.completedRequests ?? 0
+            } 
+            note='Current backend data'
+          />
+      </section>
 
-            </div>
-          </section>
+      <section className='content-card dashboard-list-card'>
+        <div className='section-header'>
+          <div>
+            <span className='eyebrow'>ACTIVITY</span>
+            <h2>Recent leave activity</h2>
+          </div>
+        <button
+          type='button'
+          className='text-button'
+          onClick={
+            () => navigate(role === 'Manager' ? '/  team-requests' :
+            role === 'HR Admin' ? '/statistics' : '/leave-requests'
+          )}>
+            View details
+            <ArrowRight size={15} />
+          </button>
         </div>
-      </main>
+        {
+          !recent.length ?
+          (<div className='empty-state'>
+            <CalendarClock size={30} />
+            <p>No leave activity has been returned by the backend.</p>
+          </div>) : 
+          (<div className='request-row-list'>
+            {
+              recent.map((request) =>
+                <div className='request-row' key={request.id}>
+                  <div className='request-row-main'>
+                    <div className='mini-avatar'>
+                      {
+                        request.employee?.firstName?.[0] || '?'
+                      }
+                    </div>
+                    <div>
+                      <strong>
+                        {
+                          request.leaveType?.name || request.leaveTypeName || 'Leave request'
+                        }
+                      </strong>
+                      <span>
+                        {request.startDate} — {request.endDate}
+                      </span>
+                    </div>
+                  </div>
+                  <div className='request-row-meta'>
+                    <strong>
+                      {
+                        request.days ?? 0
+                      } days
+                    </strong>
+                    <StatusBadge status={request.status} />
+                  </div>
+                </div>)
+              }
+            </div>
+          )}
+      </section>
     </>
-  )
+  );
 };
+
+const Metric = ({ icon, label, value, note, accent = false }) => {
+  return (
+    <article className={`metric-card ${accent ? 'metric-accent' : ''}`}>
+      <div className='metric-icon'>
+        {icon}
+      </div>
+      <div>
+        <p>{label}</p>
+        <strong>{value}</strong>
+        <span>{note}</span>
+      </div>
+    </article>
+  )
+}
 
 export default Dashboard;
