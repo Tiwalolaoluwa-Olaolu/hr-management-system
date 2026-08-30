@@ -4,7 +4,7 @@ import Login from "../../pages/Login";
 import Dashboard from "../../pages/Dashboard";
 import RequestLeave from "../../pages/RequestLeave";
 import TeamCalendar from "../../pages/TeamCalendar";
-
+import ManagerCalender from "../../pages/ManagerCalender"
 const Router = () => {
   return (
     <>
@@ -15,7 +15,7 @@ const Router = () => {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/leave-requests' element={<RequestLeave />} />
           <Route path='/team-calendar' element={<TeamCalendar />} />
-          <Route path= '/team-request' element={<ManagmentDashboard />} />
+          <Route path= '/team-request' element={<ManagerCalender />} />
         </Routes>
       </BrowserRouter>
     </>
