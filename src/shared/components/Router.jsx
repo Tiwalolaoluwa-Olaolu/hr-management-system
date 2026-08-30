@@ -15,7 +15,7 @@ const Router = () => {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/leave-requests' element={<RequestLeave />} />
           <Route path='/team-calendar' element={<TeamCalendar />} />
-          <Route path= '/team-request' element={<ManagerDashboard/>} />
+          <Route path= '/team-request' element={<ManagmentDashboard/>} />
         </Routes>
       </BrowserRouter>
     </>
