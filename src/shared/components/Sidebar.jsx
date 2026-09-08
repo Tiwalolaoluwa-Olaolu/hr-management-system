@@ -1,11 +1,20 @@
 import { CalendarCheck2, ClockFading, LayoutDashboard, LogOut, Radar } from "lucide-react";
 import NavBar from "./NavBar";
 import { useNavigate } from "react-router";
+import HrSidebar from "./HrSidebar";
+import SignOut from "./Signout";
+import { useState } from "react";
 
 const Sidebar = ({ role }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleSignOut = () => setIsOpen(prev => !prev);
+
   const navigate = useNavigate();
   const navigateToHome = () => navigate('/dashboard');
-  const navigateToCalendar = () => navigate('/team-calendar');
+  const navigateToTeam = () => navigate('/team-requests');
+  const navigateToHistory = () => navigate('/leave-history');
+  const navigateToPeople = () => navigate('/people');
+  const navigateToStats = () => navigate('/statistics');
 
   return (
     <>
@@ -13,7 +22,16 @@ const Sidebar = ({ role }) => {
         <NavBar className='side-bar-title' />
         <ul className='nav-list'>
           {
-            role === 'HR' ? (<h1>Hi</h1>) : (
+            role === 'HRAdmin' ? 
+              (
+                <HrSidebar 
+                  toHomeClick={navigateToHome}
+                  toPeopleClick={navigateToPeople}
+                  toStatsClick={navigateToStats}
+                  wide={isOpen}
+                  onClose={handleSignOut}
+                />
+              ) : (
               <>
               <li onClick={navigateToHome}>
                 <span>
@@ -28,21 +46,26 @@ const Sidebar = ({ role }) => {
                 <h3>LEAVE TRACKER</h3>
               </li>
               {
-                role === 'Manager' && (<li onClick=   {navigateToCalendar}>
+                role === 'Manager' && (<li onClick=   {navigateToTeam}>
                   <span>{<CalendarCheck2 size={32} />}</span>
-                  <h3>TEAM CALENDER</h3>
+                  <h3>TEAM REQUESTS</h3>
                 </li>)
               }
-              <li>
+              <li onClick={navigateToHistory}>
                 <span>{<Radar size={32} />}</span>
                 <h3>LEAVE HISTORY</h3>
               </li>
-              <li>
+              <li className='sidebar-signout' onClick={handleSignOut}>
                 <span>{<LogOut size={32} />}</span>
                 <h3>SIGN OUT</h3>
-              </li></>)
-            }
-          </ul>
+              </li>
+              {
+                isOpen && <SignOut wide={isOpen} onClose={handleSignOut} />
+              }
+              </>
+            )
+          }
+        </ul>
       </aside>
     </>
   )

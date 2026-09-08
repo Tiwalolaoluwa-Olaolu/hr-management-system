@@ -1,9 +1,9 @@
-const API_BASE_URL = '';
+import { clearSession, getSession } from "./Storage";
 
-const request = async (method, endpoint, body) => {
-  if (!API_BASE_URL) {
-    throw new Error('Backend API is not connected yet.');
-  }
+const API_BASE_URL = 'https://personlwesen-api-512914121676.us-central1.run.app/api';
+
+const request = async (method, endpoint, body, isPublic = false) => {
+  const session = getSession();
 
   const options = {
     method,
@@ -11,20 +11,40 @@ const request = async (method, endpoint, body) => {
   };
 
   if (body !== undefined) {
+    options.headers['Content-Type'] = 'application/json';
     options.body = JSON.stringify(body);
   }
 
+  if (!isPublic) {
+    const token = session?.token || session?.accessToken;
+    if (token) {
+      options.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+
   const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
-  const data = await response.json().catch(() => null);
+
+  const contentType = response.headers.get('content-type');
+
+  let data = null;
+
+  if(contentType?.includes('application/json')) {
+    data = await response.json().catch(() => null)
+  } else {
+    data = await response.text().catch(() => null);
+  }
 
   if (!response.ok) {
-    throw new Error(data?.message || 'The request could not be completed.');
+    throw new Error(data?.message || data?.title || `Request failed with status ${response.status}.`);
   }
 
   return data;
 };
 
-export const apiGet = (endpoint) => request('GET', endpoint);
-export const apiPost = (endpoint, body) => request('POST', endpoint, body);
-export const apiPatch = (endpoint, id, body) => request('PATCH', `${endpoint}/${id}`, body);
-export const apiDelete = (endpoint, id) => request('DELETE', `${endpoint}/${id}`);
+export const apiGet = (endpoint, isPublic = false) => request('GET', endpoint, undefined, isPublic);
+
+export const apiPost = (endpoint, body, isPublic = false) => request('POST', endpoint, body, isPublic);
+
+export const apiPut = (endpoint, id, body, isPublic = false) => request('PUT', `${endpoint}/${id}`, body, isPublic);
+
+export const apiDelete = (endpoint, id, isPublic = false) => request('DELETE', `${endpoint}/${id}`, isPublic);

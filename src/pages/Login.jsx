@@ -1,161 +1,148 @@
-import { EyeOff, LockKeyhole, LucideEye, UserRound } from "lucide-react";
-import LoginInput from "../shared/components/LoginInput";
-import NavBar from "../shared/components/NavBar";
-import Button from "../shared/components/Button";
-import { useNavigate } from "react-router";
-import { useState } from "react";
+import { Eye, EyeOff, LockKeyhole, ShieldCheck, UserRound } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import LoginInput from '../shared/components/LoginInput';
+import NavBar from '../shared/components/NavBar';
+import Button from '../shared/components/Button';
 import { useAuth } from '../core/services/Context';
-import { testUsers } from '../shared/components/TestData';
-import BgImg from "../assets/login-bg.jpg"
+import BgImg from '../assets/login-bg.jpg';
+import { apiPost } from '../core/services/Api';
 
 const Login = () => {
-  const [type, setType] = useState('password');
-  const [toggleIcon, setToggleIcon] = useState(false);
-  const [input, setInput] = useState({
-    email: '',
-    password: ''
-  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [input, setInput] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState('error');
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const togglePassword = () => {
-    setType(prev => (
-      prev === 'password' ? 'text' : 'password'
-    ));
-    setToggleIcon(!toggleIcon);
-  };
-
   const getEmailError = (email) => {
-    if (!email.trim()) return 'Email address is required.';
-    if (!email.toLowerCase().endsWith('@sbsc.com')) {
-      return 'Email address must end with @sbsc.com.';
-    }
+    const value = email.trim();
+    if (!value) return 'Email address is required.';
+    if (!/^\S+@\S+\.\S+$/.test(value)) return 'Enter a valid email address.';
     return '';
   };
 
   const getPasswordError = (password) => {
     if (!password) return 'Password is required.';
-    if (password.length < 8) return 'Password must be at least 8 characters.';
     return '';
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const validateField = (name, value) => (
+    name === 'email' ? getEmailError(value) : getPasswordError(value)
+  );
 
-    setInput(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setInput((prev) => ({ ...prev, [name]: value }));
+    setMessage('');
 
-    const fieldError =
-      name === 'email' ? getEmailError(value) : getPasswordError(value);
-
-    setErrors(prev => ({
-      ...prev,
-      [name]: fieldError
-    }));
-  }
-
-    const validate = () => {
-    const emailError = getEmailError(input.email);
-    const passwordError = getPasswordError(input.password);
-
-    setErrors({
-      email: emailError,
-      password: passwordError
-    });
-
-    return !emailError && !passwordError;
+    if (touched[name]) {
+      setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleBlur = (event) => {
+    const { name, value } = event.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+  };
+
+  const validateForm = () => {
+    const next = {
+      email: getEmailError(input.email),
+      password: getPasswordError(input.password),
+    };
+    setTouched({ email: true, password: true });
+    setErrors(next);
+    return !next.email && !next.password;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setMessage('');
-    const form = e.currentTarget;
-    if (!validate()) return;
+    if (!validateForm()) return;
 
     setLoading(true);
     try {
-      // const account = await apiPost('/auth/login', {    
-      //   email: input.email.trim(),
-      //   password: input.password
-      // });
-
-      const account = testUsers.find(
-        (testUser) =>
-          testUser.email.toLowerCase() === input.email.trim().toLowerCase() &&
-          testUser.password === input.password
-      );
-
-      if (!account) {
-        throw new Error('Invalid email address or password.');
-      }
+      const account = await apiPost('/Auth/login', {
+        email: input.email.trim(),
+        password: input.password,
+      }, true);
 
       login(account);
       navigate('/dashboard', { replace: true });
     } catch (error) {
-      setMessageType('error');
-      setMessage(error.message || 'Unable to sign in. Please try again.');
+      setMessage(error.message || 'Unable to sign in. Please check your details and try again.');
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <>
       <NavBar className='login-page-name' />
       <main className='login-page-wrapper'>
-        <img className='bg-image' src={BgImg} alt="Background image" />
-        <form onSubmit={handleSubmit}className="login-input-container">
-          <div className='login-header'>
-            <h3>Login</h3>
-            <p>Log into your account</p>
+        <img className='bg-image' src={BgImg} alt='' aria-hidden='true' />
+        <section className='login-card'>
+          <div className='login-card-intro'>
+            <span className='login-security-icon'><ShieldCheck size={25} /></span>
+            <h3 className='login-header'>LOGIN</h3>
           </div>
-          <div className='input-group'>
-            <LoginInput
-            onChange={handleChange}
-            icon={<UserRound size={37} />}
-            type='email'
-            name='email'
-            value={input.email}
-            placeholder='Email ID'
-            />
-            {errors.email && (
-                <p className='input-error' role='alert'>{errors.email}</p>
-            )}
-          </div>
-          <div className='input-group'>
-            <div className='pwd-container'>
+
+          <form onSubmit={handleSubmit} className='login-input-container' noValidate>
+            <div className='input-group'>
               <LoginInput
                 onChange={handleChange}
-                icon={<LockKeyhole size={37} />}
-                type={type}
-                name='password'
-                value={input.password}
-                placeholder='Password'
+                onBlur={handleBlur}
+                icon={<UserRound size={22} />}
+                type='email'
+                name='email'
+                value={input.email}
+                placeholder='Email address'
+                autoComplete='email'
               />
-              <div className='pwd-toggle' onClick={togglePassword}>
-                {
-                  toggleIcon ? <LucideEye /> : <EyeOff />
-                }
-              </div>
-              {errors.password && (
-                <p className='input-error' role='alert'>{errors.password}</p>
-              )}
+              {errors.email && <p className='input-error' role='alert'>{errors.email}</p>}
             </div>
-          </div>
-          <Button
-            btnUniqueStyling='log-in-btn'
-            btnText='Login'
-          />
-        </form>
+
+            <div className='input-group'>
+              <div className='pwd-container'>
+                <LoginInput
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  icon={<LockKeyhole size={22} />}
+                  type={showPassword ? 'text' : 'password'}
+                  name='password'
+                  value={input.password}
+                  placeholder='Password'
+                  autoComplete='current-password'
+                />
+                <button
+                  className='pwd-toggle'
+                  type='button'
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <Eye size={23} /> : <EyeOff size={20} />}
+                </button>
+              </div>
+              {errors.password && <p className='input-error' role='alert'>{errors.password}</p>}
+            </div>
+
+            {message && <p className='form-message error' role='alert'>{message}</p>}
+
+            <Button
+              type='submit'
+              btnUniqueStyling='log-in-btn'
+              btnText={loading ? 'Signing in…' : 'Sign in'}
+            />
+          </form>
+        </section>
       </main>
     </>
-  )
+  );
 };
 
 export default Login;
