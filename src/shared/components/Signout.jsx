@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router";
 import Button from "./Button";
 import Modal from "./Modal";
+import { useAuth } from "../../core/services/Context";
 
 const SignOut = ({wide, onClose}) => {
   const navigate = useNavigate();
-  const navigateToLandingPage = () => navigate('/');
+  const { logout } = useAuth();
 
   return (
     <>
@@ -18,7 +19,10 @@ const SignOut = ({wide, onClose}) => {
         </div>
         <div className='signout-btn-container'>
           <Button 
-            btnEvent={navigateToLandingPage}
+            btnEvent={() => {
+              logout();
+              navigate('/', { replace: true });
+            }}
             btnText='Confirm'
             btnUniqueStyling='primary-action'
           />
