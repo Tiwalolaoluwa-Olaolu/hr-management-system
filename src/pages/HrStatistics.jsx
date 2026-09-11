@@ -30,15 +30,16 @@ const HrStatistics = () => {
             <span className='eyebrow'>REPORTING</span>
             <h1>Company Statistics</h1>
             <p>
-              Employee-level statistics
+              Employee-level Statistics: Stay up to date
             </p>
           </div>
         </section>
         <section className='employee-stats-section'>
           <div className='section-header'>
             <div>
-              <span className='eyebrow'>EMPLOYEE ANALYTICS</span>
+              {/* <span className='eyebrow'>EMPLOYEE ANALYTICS</span> */}
               <h2>Employee Statistics</h2>
+              <p>  </p>
             </div>
             <IdCardLanyard size={20} />
           </div>
@@ -96,7 +97,7 @@ const HrStatistics = () => {
                   }}
                 ></span>
               </div>
-              <small>No longer marked as active</small>
+              <small>No longer working actively in the organisation</small>
             </div>
           </div>
         </div></>)}

@@ -313,15 +313,13 @@ const People = () => {
                 error ? (
                   <tr className="empty-table-row">
                     <td colSpan="7">
-                      {error} data.
+                      {error}
                     </td>
                   </tr>
                 ) : !employees.length ? (
                   <tr className="empty-table-row">
                     <td colSpan="7">
-                      {
-                        error ? `${error} data` : 'Loading...'
-                      }
+                      Loading...
                     </td>
                   </tr>
                 ) : employees.map((employee) => (
@@ -329,8 +327,8 @@ const People = () => {
                     <td>
                       <div className="employee-cell">
                         <div className="mini-avatar">
-                          {employee.firstName?.[0]}
-                          {employee.lastName?.[0]}
+                          {employee.firstName?.[0].toUpperCase()}
+                          {employee.lastName?.[0].toUpperCase()}
                         </div>
                         <strong>
                           {employee.firstName}{' '}{employee.lastName}
@@ -552,7 +550,7 @@ const People = () => {
       {
         deactivateId && (
           <ConfirmDialog
-            title="Deactivate employee?"
+            title="Deactivate Employee?"
             message="Are you sure you want to deactivate this employee?"
             confirmText="Deactivate"
             loading={loading}

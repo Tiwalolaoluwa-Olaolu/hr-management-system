@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, CalendarCheck2, ChartLine, IdCardLanyard, LogOut } from "lucide-react";
+import { CalendarCheck2, ChartLine, ChevronDown, ChevronUp, IdCardLanyard, LogOut } from "lucide-react";
 import NavBar from "./NavBar";
 import { useNavigate } from "react-router";
 import EmployeeSidebar from "./EmployeeSidebar";
@@ -38,7 +38,7 @@ const Sidebar = ({ role }) => {
                   PERSONAL
                   <span>
                     {
-                      isPersonalToggled ? <ArrowUp size={20} /> : <ArrowDown size={20} />
+                      isPersonalToggled ? <ChevronUp size={20} /> : <ChevronDown size={20} />
                     }
                   </span>
                 </p>
@@ -53,7 +53,7 @@ const Sidebar = ({ role }) => {
                     COMPANY
                     <span>
                       {
-                        isCompanyToggled ? <ArrowUp size={20} /> : <ArrowDown size={20} />
+                        isCompanyToggled ? <ChevronUp size={20} /> : <ChevronDown size={20} />
                       }
                     </span>
                   </p>
