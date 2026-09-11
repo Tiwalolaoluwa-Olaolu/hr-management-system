@@ -1,30 +1,15 @@
 import { User } from "lucide-react";
 
-const TopBar = () => {
-  const userInfo = {
-    firstName: 'Tiwalola',
-    lastName: 'Olaolu',
-    role: 'Employee',
-    status: 'Active',
-  };
-
-  const {
-    firstName,
-    lastName,
-    role,
-    status,
-  } = userInfo
-  ;
-
+const TopBar = ({name, role, status}) => {
   return (
     <>
       <section className='top-bar-section'> 
-        <span>{<User />}</span> 
-        <p>{firstName} {lastName}</p>
+        <span>{<User size={19} />}</span> 
+        <p>{name}</p>
         <p>{role}</p>
         <p>
           Status:
-          <span> {status}</span>
+          <span>{status}</span>
         </p>
       </section>
     </>

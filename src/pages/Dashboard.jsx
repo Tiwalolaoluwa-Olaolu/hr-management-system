@@ -1,77 +1,100 @@
-import { Plus } from "lucide-react";
-import Button from "../shared/components/Button";
-import Sidebar from "../shared/components/Sidebar";
-import BalanceCard from "../shared/components/BalanceCard";
-import StatsCard from "../shared/components/StatsCard";
-import { useNavigate } from "react-router";
-import ErrorMessage from "../shared/components/ErrorMessage";
-import TopBar from "../shared/components/TopBar";
+import { ArrowRight, CalendarClock, Clock3, WalletCards } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import AppShell from '../shared/components/AppShell';
+import { useAuth } from '../core/services/Context';
+import { apiGet } from '../core/services/Api';
+import Metric from '../shared/components/Metric';
 
 const Dashboard = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const [balance, setBalance] = useState(null);
+  const [error, setError] = useState('');
 
-  const userInfo = {
-    firstName: 'Tiwalola',
-    lastName: 'Olaolu',
-    role: 'Employee',
-    status: 'Active',
-    leaveBalance: 18,
-    completedRequests: 25,
-    pendingRequests: 2
-  };
+  useEffect(() => {
+    if (!user?.id) return;
+    apiGet(`/LeaveBalances/${user.id}`)
+      .then(setBalance)
+      .catch((e) => setError(e.message));
+  }, [user?.id]);
 
-  const {
-    firstName,
-    lastName,
-    role,
-    status,
-    leaveBalance,
-    completedRequests,
-    pendingRequests} = userInfo
-  ;
-
-  const navigateToRequestLeave = () => {
-    status === 'Active' ? navigate('/request-leave') : <ErrorMessage />;
-  }
+  const balanceValue = typeof balance === 'number'
+    ? balance
+    : balance?.remainingDays ?? balance?.balance ?? balance?.availableDays ?? '—';
 
   return (
-    <>
-      <main className='dashboard-wrapper'>
-        <Sidebar role={role} />
-        <div className='dashboard-main-view'>
-          <TopBar />
-          <div className='stats-section-wrapper'>
-            <h2>Welcome, {firstName}!</h2>
-            <section className='stats-section'>
-              <BalanceCard balance={leaveBalance} />
-              <StatsCard
-                cardTitle='COMPLETED'
-                number={completedRequests}
-              />
-              <StatsCard
-                cardTitle='PENDING'
-                number={pendingRequests}
-              />
-            </section>
-            <Button
-              btnEvent={navigateToRequestLeave}
-              btnUniqueStyling='request-leave-btn'
-              btnIcon={<Plus />}
-              btnText='Request Leave'
-            />
-          </div>
-          <section className="feed-section">
-            <div className='activity-section'>
-              <h3>Recent Activity</h3>
-            </div>
-            <div className='trend-section'>
-
-            </div>
-          </section>
+    <AppShell 
+      name={user?.name} 
+      role={user?.role} 
+      status={user?.status}
+    >
+      <section className='page-heading dashboard-heading'>
+        <div>
+          <span className='eyebrow'>OVERVIEW</span>
+          <h1>Hi, {user?.firstName || 'there!'}</h1>
+          <p>
+            Here is your current leave-management overview.
+          </p>
         </div>
-      </main>
-    </>
-  )
+        <button 
+          type='button' 
+          className='primary-action' 
+          onClick={() => navigate('/leave-requests')}
+        >
+          Request leave 
+          <ArrowRight size={17} />
+        </button>
+      </section>
+      {
+        error && (
+          <div className='inline-alert error-alert'>
+            {error}
+          </div>
+        )
+      }
+      <section className='metric-grid'>
+        <Metric 
+          icon={<WalletCards />} 
+          label='Leave balance' 
+          value={
+            balanceValue === '—' ? '—' : `${balanceValue} days`
+          } 
+          accent 
+        />
+        <Metric 
+          icon={<Clock3 />} 
+          label='Pending requests' 
+          value='—'
+        />
+        <Metric 
+          icon={<CalendarClock />} 
+          label='Leave history' 
+          value='—' 
+        />
+      </section>
+      <section className='content-card dashboard-list-card'>
+        <div className='section-header'>
+          <div>
+            <span className='eyebrow'>ACTIVITY</span>
+            <h2>Recent leave activity</h2>
+          </div>
+          <button 
+            type='button' 
+            className='text-button' 
+            onClick={() => navigate('/leave-history')}
+          >
+            View details 
+            <ArrowRight size={15} />
+          </button>
+        </div>
+        <div className='empty-state'>
+          <CalendarClock size={30} />
+          <p>No leave history yet!</p>
+        </div>
+      </section>
+    </AppShell>
+  );
 };
 
 export default Dashboard;

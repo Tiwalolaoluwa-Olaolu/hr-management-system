@@ -41,7 +41,7 @@ const LandingPage = () => {
           </div>
         </section>
         <section id="our-services" className='services-section'>
-          <h3>OUR SERVICES</h3>
+          <h3 style={{ marginLeft: '22px' }}>OUR SERVICES</h3>
           <div  className='card-container'>
             <Services
               icon={<Send size={25} />}

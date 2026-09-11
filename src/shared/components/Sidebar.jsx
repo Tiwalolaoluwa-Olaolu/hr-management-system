@@ -1,38 +1,95 @@
-import { CalendarCheck2, ClockFading, LayoutDashboard, LogOut, Radar } from "lucide-react";
+import { CalendarCheck2, ChartLine, ChevronDown, ChevronUp, IdCardLanyard, LogOut } from "lucide-react";
 import NavBar from "./NavBar";
 import { useNavigate } from "react-router";
+import EmployeeSidebar from "./EmployeeSidebar";
+import SignOut from "./Signout";
+import { useState } from "react";
 
 const Sidebar = ({ role }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isPersonalToggled, setIsPersonalToggled] = useState(false);
+  const [isCompanyToggled, setIsCompanyToggled] = useState(false);
+
+  const handleSignOut = () => setIsOpen(prev => !prev);
+  const togglePersonalNav = () => setIsPersonalToggled(prev => !prev);
+  const toggleCompanyNav = () => setIsCompanyToggled(prev => !prev);
+
   const navigate = useNavigate();
   const navigateToHome = () => navigate('/dashboard');
+  const navigateToTeam = () => navigate('/team-requests');
+  const navigateToHistory = () => navigate('/leave-history');
+  const navigateToPeople = () => navigate('/people');
+  const navigateToStats = () => navigate('/statistics');
 
   return (
     <>
       <aside className='side-bar'>
         <NavBar className='side-bar-title' />
         <ul className='nav-list'>
-          <li onClick={navigateToHome}>
-            <span>{<LayoutDashboard size={32} />}</span>
-            <h3>HOME</h3>
-          </li>
-          <li>
-            <span>{<ClockFading size={32} />}</span>
-            <h3>LEAVE TRACKER</h3>
-          </li>
           {
-            role === 'Manager' && <li>
-              <span>{<CalendarCheck2 size={32} />}</span>
-              <h3>TEAM REQUESTS</h3>
-          </li>
+            role === 'Employee' ? (
+              <EmployeeSidebar 
+                toHomeClick={navigateToHome}
+                toHistoryClick={navigateToHistory}
+              />
+            ) : (
+              <>
+                <p className='nav-section-header' onClick={togglePersonalNav}>
+                  PERSONAL
+                  <span>
+                    {
+                      isPersonalToggled ? <ChevronUp size={20} /> : <ChevronDown size={20} />
+                    }
+                  </span>
+                </p>
+                {
+                  isPersonalToggled && (<EmployeeSidebar 
+                    toHomeClick={navigateToHome}
+                    toHistoryClick={navigateToHistory}
+                  />)
+                }
+                <ul className='nav-list'>
+                  <p className='nav-section-header' onClick={toggleCompanyNav}>
+                    COMPANY
+                    <span>
+                      {
+                        isCompanyToggled ? <ChevronUp size={20} /> : <ChevronDown size={20} />
+                      }
+                    </span>
+                  </p>
+                  {
+                    (isCompanyToggled && role === 'HRAdmin') && (
+                      <>
+                        <li onClick={navigateToPeople}>
+                          <span>{<IdCardLanyard size={32} />}</span>
+                          <h3>PEOPLE</h3>
+                        </li>
+                        <li onClick={navigateToStats}>
+                          <span>{<ChartLine size={32} />}</span>
+                          <h3>LEAVE STATISTICS</h3>
+                        </li>
+                      </>
+                    )
+                  }
+                  {
+                    (isCompanyToggled && role === 'Manager') && (
+                      <li onClick={navigateToTeam}>
+                        <span>{<CalendarCheck2 size={32} />}</span>
+                        <h3>TEAM REQUESTS</h3>
+                      </li>
+                    )
+                  } 
+                </ul>
+              </>
+            )
           }
-          <li>
-            <span>{<Radar size={32} />}</span>
-            <h3>LEAVE HISTORY</h3>
-          </li>
-          <li>
+          <li className='sidebar-signout' onClick={handleSignOut}>
             <span>{<LogOut size={32} />}</span>
             <h3>SIGN OUT</h3>
           </li>
+          {
+            isOpen && <SignOut wide={isOpen} onClose={handleSignOut} />
+          }
         </ul>
       </aside>
     </>
