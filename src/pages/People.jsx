@@ -267,9 +267,7 @@ const People = () => {
       <section className="page-heading">
         <div>
           <span className="eyebrow">PEOPLE</span>
-
           <h1>Employee Management System</h1>
-
           <p>
             Create, Update and Manage Employee Records.
           </p>
@@ -321,7 +319,9 @@ const People = () => {
                 ) : !employees.length ? (
                   <tr className="empty-table-row">
                     <td colSpan="7">
-                      No employee records exist in our database.
+                      {
+                        error ? `${error} data` : 'Loading...'
+                      }
                     </td>
                   </tr>
                 ) : employees.map((employee) => (
@@ -332,8 +332,8 @@ const People = () => {
                           {employee.firstName?.[0]}
                           {employee.lastName?.[0]}
                         </div>
-                        <strong>                                {employee.firstName}{' '}
-                          {employee.lastName}
+                        <strong>
+                          {employee.firstName}{' '}{employee.lastName}
                         </strong>
                       </div>
                     </td>
@@ -348,7 +348,7 @@ const People = () => {
                     <td>
                       <StatusBadge
                         status={
-                          employee.status === '0' ? 'Active': 'Inactive'
+                          employee.status === 0 ? 'Active': 'Inactive'
                         }
                       />
                     </td>
@@ -366,7 +366,7 @@ const People = () => {
                           STATUS.ACTIVE && (
                           <button
                             type="button"
-                            className="table-action"
+                            className="table-action deactivate-btn"
                             onClick={() =>
                               setDeactivateId(employee.id)
                             }

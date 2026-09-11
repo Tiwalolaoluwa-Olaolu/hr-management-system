@@ -496,13 +496,12 @@ body {
 }
 
 .side-bar {
-  position: fixed;
   width: 280px;
   min-width: 280px;
   height: 100vh;
   background-color: hsl(216, 71%, 23%);
   color: #fff; 
-  padding: 22px 14px 18px;
+  padding-block: 22px 12px;
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -511,7 +510,7 @@ body {
 
 .side-bar-title {
   position: static;
-  padding: 0 8px;
+  padding: 0 14px;
   height: auto;
 }
 
@@ -524,66 +523,25 @@ body {
   font-size: 1.45rem;
 }
 
-.sidebar-user {
-  margin: 28px 6px 26px;
-  padding: 15px 12px;
-  display: flex;
-  gap: 11px;
-  align-items: center;
-  border: 1px solid rgba(255, 255, 255, .12);
-  background-color: rgba(255, 255, 255, .06);
-  border-radius: 10px;
-}
-
-.sidebar-avatar, .mini-avatar, .avatar-large {
+.nav-section-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background-color: hsl(18, 86%, 39%);
-  color: #fff;
-  font-weight: 700;
-  flex-shrink: 0;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  font-weight: 800;
+  font-size: 1.2rem;
+  background-color: rgb(55, 99, 136);
+  cursor: pointer;
 }
 
-.sidebar-avatar {
-  width: 38px;
-  height: 38px;
-  font-size: .75rem;
-}
-
-.sidebar-user div:last-child {
-  min-width: 0;
-}
-
-.sidebar-user strong, .sidebar-user span {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.sidebar-user strong {
-  font-size: .82rem;
-}
-
-.sidebar-user span {
-  font-size: .68rem;
-  color: hsl(212, 27%, 78%);
-  margin-top: 3px;
-}
-
-.sidebar-label {
-  color: hsl(212, 27%, 74%);
-  font-size: .62rem;
-  letter-spacing: .14em;
-  font-weight: 700;
-  padding: 0 12px 8px;
+.company-nav {
+  margin-top: 25px;
 }
 
 .nav-list {
   list-style: none;
-  margin-top: 20px;
+  margin-top: 15px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -592,7 +550,7 @@ body {
 
 .nav-list li {
   width: 100%;
-  padding: 11px 12px;
+  padding: 11px 26px;
   color: hsl(212, 27%, 88%);
   display: flex;
   align-items:center; 
@@ -1220,9 +1178,27 @@ td > span {
   gap: 5px; 
   color: hsl(216, 71%, 30%); 
   background-color: transparent; 
+  border: 1px solid hsl(216, 18%, 58%);
+  border-radius: 4px;
+  padding: 5px 8px;
   font-weight: 700; 
   font-size: .68rem; 
   cursor: pointer;
+}
+
+.table-action:hover {
+  color: hsl(145, 45%, 93%);
+  border: none;
+  background-color: hsl(212, 27%, 25%);
+  transform: scale(1.1);
+}
+
+.deactivate-btn {
+  margin-left: 10px;
+}
+
+.deactivate-btn:hover {
+  background-color: hsl(18, 86%, 39%); 
 }
 
 .danger-text { 
@@ -1616,6 +1592,14 @@ td > span {
 }
 
 /*COMPANY STATISTICS*/
+.employee-stats-section {
+  min-height: 100px;
+}
+
+.error-alert {
+  text-align: center;
+}
+
 .employee-overview {
   background: #ffffff;
   border: 1px solid #e9edf3;
@@ -1657,7 +1641,8 @@ td > span {
 }
 
 .employee-total-badge {
-  min-width: 125px;
+  width: 120px;
+  margin-left: auto;
   padding: 1rem 1.2rem;
   border-radius: 14px;
   background: #f7f8fa;
@@ -1683,16 +1668,16 @@ td > span {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.4rem;
-  margin-top: 2rem;
+  margin-block: 1rem;
 }
 
 .employee-status-item {
   display: flex;
   gap: 1rem;
   padding: 1.4rem;
-  border: 1px solid #edf0f4;
+  border: 1px solid hsl(214, 24%, 94%);
   border-radius: 14px;
-  background: #fcfcfd;
+  background-color: hsl(240, 20%, 99%);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
