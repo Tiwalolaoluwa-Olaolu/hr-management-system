@@ -5,7 +5,7 @@ import Modal from './Modal';
 import StatusBadge from './StatusBadge';
 import Toast from './Toast';
 import { useAuth } from '../../core/services/Context';
-import { apiGet } from '../../core/services/Api';
+import { apiGet, apiPut } from '../../core/services/Api';
 import FormTextArea from './FormTextArea';
 
 const AccessTeamRequests = () => {
@@ -29,7 +29,7 @@ const AccessTeamRequests = () => {
     if (!decision) return; 
     setLoading(true); 
     try { 
-      const result = await apiPatch('/leave-requests',  
+      const result = await apiPut('/leave-requests',  
         selected.id, 
         { status: decision, comment }
       ); 
@@ -48,7 +48,7 @@ const AccessTeamRequests = () => {
       <section className='page-heading team-requests-sec'>
         <div>
           <span className='eyebrow'>TEAM MANAGEMENT</span>
-          <h1>Team requests</h1>
+          <h1>Team Requests</h1>
           <p>
             Review leave requests from your direct reports.
           </p>

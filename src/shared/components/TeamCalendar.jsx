@@ -34,7 +34,7 @@ const TeamCalendar = () => {
         <section className='content-card calendar-card'>
           <div className='calendar-toolbar'>
             <div>
-              <h2>Approved leave</h2>
+              <h2>Approved Leave</h2>
               <span>
                 <CalendarDays size={15} /> 
                 My team's calendar data
@@ -60,7 +60,7 @@ const TeamCalendar = () => {
             </div>
           </div>
           {
-            !calendar.length ? <p>'No approved team leave was returned for this date range.' </p> : 
+            !calendar?.length ? <p>'No approved team leave was returned for this date range.' </p> : 
             (<div className='request-row-list'>
               {
                 calendar.map(item => (<div 

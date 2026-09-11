@@ -75,9 +75,13 @@ const Login = () => {
       login(account);
       navigate('/dashboard', { replace: true });
     } catch (error) {
-      setMessage(error.message || 'Unable to sign in. Please check your details and try again.');
+      setMessage('Unable to sign in. Please check your details and try again.');
     } finally {
       setLoading(false);
+      setInput({
+        email: '',
+        password: ''
+      })
     }
   };
 
@@ -92,7 +96,7 @@ const Login = () => {
             <h3 className='login-header'>LOGIN</h3>
           </div>
 
-          <form onSubmit={handleSubmit} className='login-input-container' noValidate>
+          <form onSubmit={handleSubmit} className='login-input-container'>
             <div className='input-group'>
               <LoginInput
                 onChange={handleChange}
@@ -102,7 +106,6 @@ const Login = () => {
                 name='email'
                 value={input.email}
                 placeholder='Email address'
-                autoComplete='email'
               />
               {errors.email && <p className='input-error' role='alert'>{errors.email}</p>}
             </div>
@@ -117,7 +120,6 @@ const Login = () => {
                   name='password'
                   value={input.password}
                   placeholder='Password'
-                  autoComplete='current-password'
                 />
                 <button
                   className='pwd-toggle'
