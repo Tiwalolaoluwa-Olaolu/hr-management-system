@@ -1,12 +1,8 @@
 import { CalendarDays } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import AppShell from '../shared/components/AppShell';
-import ApiStatus from '../shared/components/ApiStatus';
-import { useAuth } from '../core/services/Context';
-import { apiGet } from '../core/services/Api';
+import { apiGet } from '../../core/services/Api';
 
 const TeamCalendar = () => { 
-  const { user } = useAuth();
   const [calendar, setCalendar] = useState(null); 
   const [error, setError] = useState(''); 
   const [range, setRange] = useState({ 
@@ -26,15 +22,10 @@ const TeamCalendar = () => {
     
   return (
     <>
-      <AppShell
-        name={user.name}
-        role={user.role}
-        status={user.status}
-      >
         <section className='page-heading'>
           <div>
             <span className='eyebrow'>TEAM COVERAGE</span>
-            <h1>Team leave calendar</h1>
+            <h1>Team Leave Calendar</h1>
             <p>
               View approved leave for your direct reports.
             </p>
@@ -46,7 +37,7 @@ const TeamCalendar = () => {
               <h2>Approved leave</h2>
               <span>
                 <CalendarDays size={15} /> 
-                Backend calendar data
+                My team's calendar data
               </span>
             </div>
             <div className='calendar-range'>
@@ -69,8 +60,7 @@ const TeamCalendar = () => {
             </div>
           </div>
           {
-            error ? <ApiStatus message={error} /> : !calendar ? <ApiStatus /> : 
-            !calendar.length ? <ApiStatus message='No approved team leave was returned for this date range.' /> : 
+            !calendar.length ? <p>'No approved team leave was returned for this date range.' </p> : 
             (<div className='request-row-list'>
               {
                 calendar.map(item => (<div 
@@ -100,7 +90,6 @@ const TeamCalendar = () => {
             </div>)
           }
           </section>
-        </AppShell>
       </>
     ) 
   };

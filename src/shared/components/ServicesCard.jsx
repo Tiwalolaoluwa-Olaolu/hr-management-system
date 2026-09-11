@@ -1,5 +1,3 @@
-
-
 const ServicesCard = ({ icon, title, content }) => {
   return (
     <>

@@ -1,16 +1,16 @@
 import { X } from 'lucide-react';
 
-const Modal = ({title, children, onClose, wide = false}) => {
+const Modal = ({title, icon, children, onClose, wide = false}) => {
   return (
     <>
       <div className='modal-backdrop' role='presentation' onMouseDown={onClose}>
-        <div className={
-          `modal ${wide ? 'modal-wide' : ''}`
-          }
+        <div 
+          className={`modal ${wide ? 'modal-wide' : ''}`}
           role='dialog' 
-          onMouseDown={(e) => e.stopPropagation()}
+          onMouseDown={e => e.stopPropagation()}
         >
           <div className='modal-header'>
+            <span>{icon}</span>
             <h3>{title}</h3>
             <button
               type='button' 

@@ -5,6 +5,7 @@ export const getSession = () => {
     const session = sessionStorage.getItem(SESSION_KEY);
     return session ? JSON.parse(session) : null;
   } catch {
+    sessionStorage.removeItem(SESSION_KEY);
     return null;
   }
 };

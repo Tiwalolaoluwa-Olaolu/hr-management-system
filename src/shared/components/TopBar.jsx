@@ -4,7 +4,7 @@ const TopBar = ({name, role, status}) => {
   return (
     <>
       <section className='top-bar-section'> 
-        <span>{<User />}</span> 
+        <span>{<User size={19} />}</span> 
         <p>{name}</p>
         <p>{role}</p>
         <p>

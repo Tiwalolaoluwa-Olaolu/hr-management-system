@@ -1,7 +1,7 @@
 const ErrorMessage = () => {
   return (
     <>
-      <p>Only active employees can submit new leave requests</p>
+      <p>Only active employees can submit new leave requests!</p>
     </>
   )
 };

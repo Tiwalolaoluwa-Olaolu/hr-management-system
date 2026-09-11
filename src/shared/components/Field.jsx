@@ -3,21 +3,36 @@ const Field = ({ label, name, type = 'text', value, onChange, error, required = 
     <label htmlFor={name}>
         {label}
         {
-        required && <span className='required-mark'>*</span>
+          required && <span className='required-mark'>*</span>
         }
       </label>
     {
-      children || (<input 
-        id={name}
-        name={name}
-        type={type}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        min={min}
-        max={max}
-        disabled={disabled}
-      />)
+      children ? (
+        <select
+          id={name}
+          name={name}
+          value={value ?? ''}
+          onChange={onChange}
+          disabled={disabled}
+          required={required}
+        >
+          {children}
+        </select>
+      ) :
+      (
+        <input 
+          id={name}
+          name={name}
+          type={type}
+          value={value ?? ''}
+          onChange={onChange}
+          placeholder={placeholder}
+          min={min}
+          max={max}
+          disabled={disabled}
+          required={required}
+        />
+      )
     }
     {
       error && <small className='field-error'>{error}</small>
