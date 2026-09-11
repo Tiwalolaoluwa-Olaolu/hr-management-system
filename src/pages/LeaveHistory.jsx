@@ -24,7 +24,7 @@ const LeaveHistory = () => {
                   <div className='section-header'>
                     <div>
                       <span className='eyebrow'>HISTORY</span>
-                      <h2>My leave requests</h2>
+                      <h2>My Leave Requests</h2>
                     </div>
                     </div>
                    <div className='table-wrap'>

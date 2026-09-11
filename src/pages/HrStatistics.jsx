@@ -1,4 +1,4 @@
-import { BarChart3, UserCheck, UserX } from 'lucide-react';
+import { BarChart3, IdCardLanyard, UserCheck, UserX } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import AppShell from '../shared/components/AppShell';
 import { apiGet } from '../core/services/Api';
@@ -15,8 +15,8 @@ const HrStatistics = () => {
       .catch((e) => setError(e.message));
   }, []);
 
-  const active = employees.filter(item => Number(item.status) === 0).length;
-  const inactive = employees.filter(item => Number(item.status) === 1).length;
+  const active = employees.filter(item => item.status === 0).length;
+  const inactive = employees.filter(item => item.status === 1).length;
 
   return (
     <>
@@ -28,20 +28,28 @@ const HrStatistics = () => {
         <section className='page-heading'>  
           <div>
             <span className='eyebrow'>REPORTING</span>
-            <h1>Company statistics</h1>
+            <h1>Company Statistics</h1>
             <p>
               Employee-level statistics
             </p>
           </div>
         </section>
-        {
-          error && (
-            <div className='inline-alert error-alert'>
-              {error}
+        <section className='employee-stats-section'>
+          <div className='section-header'>
+            <div>
+              <span className='eyebrow'>EMPLOYEE ANALYTICS</span>
+              <h2>Employee Statistics</h2>
             </div>
-          )
-        }
-        <section>
+            <IdCardLanyard size={20} />
+          </div>
+          { 
+            error ? (
+              <p className='inline-alert error-alert'>
+                <span></span>
+                {error}
+              </p>
+          ) : (
+          <>
           <div className="employee-total-badge">
             <span>{employees.length}</span>
             <small>Total employees</small>
@@ -91,7 +99,7 @@ const HrStatistics = () => {
               <small>No longer marked as active</small>
             </div>
           </div>
-        </div>
+        </div></>)}
       </section>
       <section className='content-card dashboard-list-card'>
         <div className='section-header'>
@@ -99,7 +107,7 @@ const HrStatistics = () => {
             <span className='eyebrow'>LEAVE ANALYTICS</span>
             <h2>Leave Statistics</h2>
           </div>
-          <BarChart3 size={20} />
+          <BarChart3 size={18} />
         </div>
         <div className='empty-state'>
           <BarChart3 size={30} />
