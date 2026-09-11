@@ -9,8 +9,10 @@ const FormTextArea = ({ labelTitle, id, name, value, onChange, placeholder, erro
           id={id} 
           value={value ?? ''}
           placeholder={placeholder}
-          error={error}
         ></textarea>
+        {
+          error && <small className='field-error'>{error}</small>
+        }
       </div>
     </>
   )

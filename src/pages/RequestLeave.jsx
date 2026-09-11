@@ -53,12 +53,33 @@ const RequestLeave = () => {
       [name]: '' 
     })); 
   };
-  const validate = () => { 
-    const errors = {}; 
-    if (!form.leaveTypeId) errors.leaveTypeId = 'Leave type is required.'; 
-    if (!form.startDate) errors.startDate = 'Start date is required.'; 
-    if (!form.endDate) errors.endDate = 'End date is required.';if (days <= 0 && form.startDate && form.endDate) next.endDate = 'End date must be on or after start date.'; 
-    if (!form.reason.trim()) errors.reason = 'Reason is required.'; 
+  const today = new Date().toISOString().slice(0, 10);
+
+  const validate = () => {
+    const errors = {};
+
+    if (!form.leaveTypeId) {
+      errors.leaveTypeId = 'Leave type is required.';
+    }
+
+    if (!form.startDate) {
+      errors.startDate = 'Start date is required.';
+    } else if (form.startDate < today) {
+      errors.startDate = 'Start date cannot be in the past.';
+    }
+
+    if (!form.endDate) {
+      errors.endDate = 'End date is required.';
+    } else if (form.startDate && form.endDate < form.startDate) {
+      errors.endDate = 'End date must be on or after start date.';
+    }
+
+    if (!form.reason.trim()) {
+      errors.reason = 'Reason is required.';
+    } else if (form.reason.trim().length < 5) {
+      errors.reason = 'Please add a bit more detail (at least 5 characters).';
+    }
+
     return errors;
   };
 
@@ -67,7 +88,7 @@ const RequestLeave = () => {
     const validateErrors = validate();
     setErrors(validateErrors);
     setToast(''); 
-    if (Object.keys(validateErrors) > 0) return; 
+    if (Object.keys(validateErrors).length > 0) return; 
     setLoading(true); 
     try { 
       const created = await apiPost('/leave-requests', {    
@@ -85,13 +106,6 @@ const RequestLeave = () => {
         endDate: '', 
         reason: '' 
       }); 
-      setRequests(prev => ([newRequest, ...prev]));
-      setForm({
-        leaveTypeId: '',
-        startDate: '',
-        endDate: '',
-        reason: ''
-      });
       setToast('Leave request submitted successfully.'); 
     } catch(e) { 
       setToast(e.message); 
