@@ -16,6 +16,7 @@ const Sidebar = ({ role }) => {
 
   const navigate = useNavigate();
   const navigateToHome = () => navigate('/dashboard');
+  const navigateToLeaveTracker = () => navigate('/leave-tracker');
   const navigateToTeam = () => navigate('/team-requests');
   const navigateToHistory = () => navigate('/leave-history');
   const navigateToPeople = () => navigate('/people');
@@ -31,6 +32,7 @@ const Sidebar = ({ role }) => {
               <EmployeeSidebar 
                 toHomeClick={navigateToHome}
                 toHistoryClick={navigateToHistory}
+                toLeaveTrackerClick={navigateToLeaveTracker}
               />
             ) : (
               <>
@@ -38,7 +40,7 @@ const Sidebar = ({ role }) => {
                   PERSONAL
                   <span>
                     {
-                      isPersonalToggled ? <ChevronUp size={20} /> : <ChevronDown size={20} />
+                      isPersonalToggled ? <ArrowUp size={20} /> : <ArrowDown size={20} />
                     }
                   </span>
                 </p>
@@ -46,6 +48,7 @@ const Sidebar = ({ role }) => {
                   isPersonalToggled && (<EmployeeSidebar 
                     toHomeClick={navigateToHome}
                     toHistoryClick={navigateToHistory}
+                    toLeaveTrackerClick={navigateToLeaveTracker}
                   />)
                 }
                 <ul className='nav-list'>
@@ -53,7 +56,7 @@ const Sidebar = ({ role }) => {
                     COMPANY
                     <span>
                       {
-                        isCompanyToggled ? <ChevronUp size={20} /> : <ChevronDown size={20} />
+                        isCompanyToggled ? <ArrowUp size={20} /> : <ArrowDown size={20} />
                       }
                     </span>
                   </p>
