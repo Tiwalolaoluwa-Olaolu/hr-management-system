@@ -16,6 +16,7 @@ const Sidebar = ({ role }) => {
 
   const navigate = useNavigate();
   const navigateToHome = () => navigate('/dashboard');
+  const navigateToLeaveTracker = () => navigate('/leave-tracker');
   const navigateToTeam = () => navigate('/team-requests');
   const navigateToHistory = () => navigate('/leave-history');
   const navigateToPeople = () => navigate('/people');
@@ -31,6 +32,7 @@ const Sidebar = ({ role }) => {
               <EmployeeSidebar 
                 toHomeClick={navigateToHome}
                 toHistoryClick={navigateToHistory}
+                toLeaveTrackerClick={navigateToLeaveTracker}
               />
             ) : (
               <>
@@ -46,6 +48,7 @@ const Sidebar = ({ role }) => {
                   isPersonalToggled && (<EmployeeSidebar 
                     toHomeClick={navigateToHome}
                     toHistoryClick={navigateToHistory}
+                    toLeaveTrackerClick={navigateToLeaveTracker}
                   />)
                 }
                 <ul className='nav-list'>
