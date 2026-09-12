@@ -875,6 +875,17 @@ body {
   width: 34px;
   height: 34px; 
   font-size: .65rem; 
+  background-color: hsl(0, 55%, 38%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: .08rem;
+  font-size: .7rem;
+  font-weight: 800;
+  color: hsl(212, 27%, 96%);
+  transform: translateX(-5px);
+  box-shadow: 0 4px 15px hsl(18, 86%, 90%);
 }
 
 .request-row-main strong, .employee-cell strong {
@@ -909,7 +920,7 @@ body {
 }
 
 .status-pending {
-  color: hsl(18,86%,32%);
+  color: hsl(18, 86%, 32%);
   background-color: hsl(18, 86%, 94%);
 }
 
@@ -1280,12 +1291,13 @@ td > span {
   color: hsl(212, 27%, 48%);
   font-size: .8rem;
   line-height: 1.6;
+  text-align: center;
 }
 
 .modal-actions { 
   display: flex; 
   justify-content: flex-end; 
-  gap: 9px; 
+  gap: 15px; 
   margin-top: 20px; 
 }
 
@@ -1308,6 +1320,7 @@ td > span {
   background-color: hsl(18, 86%, 39%); 
   color: #fff; 
   padding: 10px 15px; 
+  border: none;
   border-radius: 7px; 
   cursor: pointer; 
   font-size: .75rem; 
@@ -1641,27 +1654,28 @@ td > span {
 }
 
 .employee-total-badge {
-  width: 120px;
+  width: 200px;
   margin-left: auto;
   padding: 1rem 1.2rem;
   border-radius: 14px;
   background: #f7f8fa;
   text-align: right;
+  background-color: hsl(216, 71%, 23%);
 }
 
 .employee-total-badge span {
   display: block;
   font-size: 1.75rem;
-  font-weight: 750;
-  color: #1d2939;
+  font-weight: 800;
+  color: hsl(212, 27%, 97%);
   line-height: 1;
 }
 
 .employee-total-badge small {
   display: block;
   margin-top: 0.4rem;
-  font-size: 0.75rem;
-  color: #667085;
+  font-size: .8rem;
+  color: hsl(18, 28%, 88%);
 }
 
 .employee-status-list {
@@ -1685,7 +1699,7 @@ td > span {
 }
 
 .employee-status-item:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1.5px);
   border-color: #dfe4ea;
   box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
 }
