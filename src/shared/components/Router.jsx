@@ -7,10 +7,6 @@ import HrStatistics from "../../pages/HrStatistics";
 import People from "../../pages/People";
 import LeaveHistory from "../../pages/LeaveHistory";
 import TeamRequests from "../../pages/TeamRequests";
-import HrStatistics from "../../pages/HrStatistics";
-import People from "../../pages/People";
-import LeaveHistory from "../../pages/LeaveHistory";
-import TeamRequests from "../../pages/TeamRequests";
 import LeaveTracker from "../../pages/LeaveTracker";
 
 const Router = () => {
