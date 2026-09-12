@@ -33,6 +33,7 @@ const Sidebar = ({ role }) => {
                 toHomeClick={navigateToHome}
                 toHistoryClick={navigateToHistory}
                 toLeaveTrackerClick={navigateToLeaveTracker}
+                role={role}
               />
             ) : (
               <>
@@ -49,6 +50,7 @@ const Sidebar = ({ role }) => {
                     toHomeClick={navigateToHome}
                     toHistoryClick={navigateToHistory}
                     toLeaveTrackerClick={navigateToLeaveTracker}
+                    role={role}
                   />)
                 }
                 <ul className='nav-list'>
