@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
 import Field from '/Field';
-import StatusBadge from './StatusBadge';
-import Toast from './Toast';
-import { apiGet } from '../../core/services/Api';
+import StatusBadge from '/StatusBadge';
+import Toast from '/Toast';
+import { apiGet } from '/core/services/Api';
 
 const TODAY = new Date().toISOString().slice(0, 10);
 
